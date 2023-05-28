@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %}
+{% load humanize %}
+{% load static %}
+{% block sidebars %}
+{% endblock %}
+{% block content %}
+        <div class="content">
+            <div class="products">
+                {% for p in profiles %}<div class="photo_product">
+                    {% if p.photo %}
+                        <a href="{{ p.get_absolute_url }}"><img class="img_content" src="{{p.photo.url}}">
+                            <div>
+                                <div class="title_photo">
+                                    <div style="max-width:50%;">{{p.title}}</div>
+                                    <div>{% if p.get_sale == p.price  %}
+                                            {{p.price|intcomma}}₽
+                                        {% else %}
+                                            <span style="color: #999;font-size: 14px;text-decoration:line-through black;">{{p.price|intcomma}}₽</span>
+                                            <span>{{p.get_sale|intcomma}}₽</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                            <div  class="fast_cart">
+                                <form action="{% url 'cart:cart_add' p.id %}" method="post">
+                                    {{ cart_product_form }}
+                                    {% csrf_token %}
+                                    <input class="fast_add_cart" type="submit" value="Добавить в корзину">
+                                </form>
+                            </div>
+
+                    {% endif %}
+
+                    </div>{% endfor %}
+            </div>
+        </div>
+{% endblock %}

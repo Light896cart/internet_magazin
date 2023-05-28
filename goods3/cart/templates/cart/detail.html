@@ -1,0 +1,72 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block filter_header %}
+{% endblock %}
+{% block sidebar %}
+{% endblock %}
+{% block title %}
+    Корзина пуста
+{% endblock %}
+{% block content %}
+<div style="margin:0 7%;">
+    {% with total_items_ed=cart|length %}
+        {% if cart|length == 0 %}
+            <h1 style="text-align:center;height:200px;" >Корзина пуста</h1>
+        <p style="text-align:center;height:200px;"><a  href="{% url 'home' %}" class="button light">Продолжить делать покупку</a></p>
+        {% else %}
+    <h1 class='cart_cart'>Корзина</h1>
+    <div class="cart_cart_div" class="open_cart">
+        <div class="cart_cart_div_div">
+            {% for item in cart %}
+                {% with product=item.product %}
+                    <div class="in_basket_content">
+                        <div>
+                            <a href="{{ product.get_absolute_url }}">
+                                <img src="{% if product.photo %}{{ product.photo.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" width="100" height="154">
+
+                            </a>
+                        </div>
+                        <div class="cart_cell">
+                            <a class="cart_cell_a" style="color:black;" href="{{ product.get_absolute_url }}"><h2 >{{ product.title }}</h2></a>
+                            <p style="font-size: 14px;" >{{ item.total_price }}₽</p>
+                            <p>{{ item.quantity }} ед.</p>
+                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                                {{ item.update_quantity_form.quantity }}
+                                {{ item.update_quantity_form.update }}
+                                {% csrf_token %}
+                            </form>
+                            <a href="{% url 'cart:cart_remove' product.id%}"><img src="{% static 'main/img/4115230-cancel-close-cross-delete_114048.png' %}" width="24"></a>
+                        </div>
+                    </div>
+                {% endwith %}
+            {% endfor %}
+        </div>
+        <div class="purchase_menu">
+            <div class="total">
+                <div style="display: flex;justify-content: space-between;" >
+                    <div style="font-size: 17px;">
+                        {% with total_items_ed=cart|length %}
+                        {% if cart|length == 1 %}
+                            <span class="total_items_ed">{{ total_items_ed }} вещь</span>
+                        {% else %}
+                            {% if cart|length < 5 %}
+                                <span class="total_items_ed">{{ total_items_ed }} вещи</span>
+                            {% else %}
+                                <span class="total_items_ed">{{ total_items_ed }} вещей</span>
+                            {% endif %}
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div style="font-weight: bold;font-size: 17px;" class="num">{{ cart.get_total_price }}₽</div>
+                </div>
+            </div>
+            <p style="text-align:center;" class="text-right">
+                <a href="{% url 'home' %}" class="button light"><button style="margin-top:45px;" class="two_buttons_in_the_basket two_buttons_in_the_basket_cell">Продолжить делать покупку</button></a>
+                <a href="{% url 'orders:order_create' %}" class=""><button  id="two_buttons_arrange" class="two_buttons_in_the_basket">Оформить покупку</button></a>
+            </p>
+        </div>
+    </div>
+    {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

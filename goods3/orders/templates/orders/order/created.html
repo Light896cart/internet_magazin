@@ -1,0 +1,20 @@
+{% extends "main/base.html" %}
+{% block filter_header %}
+{% endblock %}
+{% block sidebar %}
+{% endblock %}
+{% block title %}Thank you{% endblock %}
+
+{% block content %}
+<div style="margin-right:1%;">
+    <h2 class="thank_order">СПАСИБО ЗА ЗАКАЗ</h2>
+    <p style="text-align:center;margin-top:100px;margin-bottom:70px;">Ваш заказ был успешно выполнен.</p>
+    <div style="text-align:center;max-width:70%;margin:60px 30%;font-size: 1.171em;">
+        <p>В ближайшее время менеджер свяжется с вами для подтверждения заказа.</p>
+        <p>Ваш телефон {{ order.phoneNumber }}</p>
+    </div>
+    <div style="text-align:center;">
+        <a href="{% url 'home' %}" class="button light"><button style="" class="two_buttons_the_basket">Продолжить покупки</button></a>
+    </div>
+</div>
+{% endblock %}

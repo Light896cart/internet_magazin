@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content">
+            <div class="products">
+                {% for p in object_list %}<div class="photo_product">
+                    {% if p.photo %}
+                        <a href="{{ p.get_absolute_url }}"><img class="img_content" src="{{p.photo.url}}">
+                            <div>
+                                <div class="title_photo">
+                                    <div>{{p.title}}</div>
+                                    <div>{{p.price}}₽</div>
+                                </div>
+                            </div>
+                        </a>
+                            <div  class="fast_cart">
+                                <form action="{% url 'cart:cart_add' p.id %}" method="post">
+                                    {{ cart_product_form }}
+                                    {% csrf_token %}
+                                    <input class="fast_add_cart" type="submit" value="Добавить в корзину">
+                                </form>
+                            </div>
+
+                    {% endif %}
+
+                    </div>{% endfor %}
+            </div>
+        </div>
+{% endblock %}

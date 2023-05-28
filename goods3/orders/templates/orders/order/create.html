@@ -1,0 +1,88 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block filter_header %}
+{% endblock %}
+{% block title %}Checkout{% endblock %}
+{% block sidebar %}
+{% endblock %}
+{% block content %}
+    <h1 style="text-align:center;padding: 0 0 20px;border-bottom: 0.5px solid #dadce1;">Оформление заказа</h1>
+<form action="." method="post" class="order-form">
+    <div class="order-info">
+        <div class="making_order_left">
+            <h3>Способ получения заказа</h3>
+            <div style="display:flex;align-items: center;margin:30px 0 ;">
+                <input checked="checked" type="radio" class="ball">
+                <h3 style="margin-left:10px;">Доставка</h3>
+            </div>
+                <div class="id_address_input">
+                    <input style="width:500px;" type="text" autocomplete="on" placeholder="Адрес доставки" class="form_orders" name="address" value="" maxlength="250" required="" id="id_address">
+                </div>
+        </div>
+        <div class="making_order_right">
+            <div>
+                    <div style="margin-bottom:20px;display:flex;justify-content: space-between;">
+                        <div> Итого</div>
+                        <div>
+                            {% with total_items_ed=cart|length %}
+                                    {{ total_items_ed }} тв.
+                            {% endwith %}
+                        </div>
+                    </div>
+            </div>
+            {% for item in cart %}
+                {% with product=item.product %}
+                    <div style="display:flex;justify-content: space-between;" class="">
+                        <div style="display:flex;">
+                            <div>
+                                <a href="{{ product.get_absolute_url }}">
+                                    <img src="{% if product.photo %}{{ product.photo.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" style="object-fit: contain;" height="80" width="80">
+
+                                </a>
+                            </div>
+                            <div class="">
+                                <a style="text-transform: uppercase;color:black;" href="{{ product.get_absolute_url }}"><h5 style="margin-left:10px;max-width: 90%;" >{{ product.title }}</h5></a>
+                            </div>
+                        </div>
+                        <div style="font-size: smaller;">
+                            <div>{{ item.total_price }}₽</div>
+                           <div style="float:right;">{{ item.quantity }} тв.</div>
+                        </div>
+                    </div>
+                {% endwith %}
+            {% endfor %}
+            <div style="margin-top:20px;display:flex;justify-content: space-between;">
+                <div>
+                    <div style="font-weight: bold;">К оплате:</div>
+                    <div style="font-size: smaller;">Доставка</div>
+                </div>
+                <div>
+                    <div style="font-weight: bold;">{{ cart.get_total_price }}₽</div>
+                    <div style="font-size: smaller;">Бесплатно</div>
+                </div>
+            </div>
+        <div style="margin-left:10%;margin-bottom:10px;margin-top:20px;max-width: 80%;text-align:center;font-size:smaller;">Для подтверждения заказа, пожалуйста, укажите:</div>
+
+            <div style="text-align:center;">
+                <p>
+                    <input type="text" placeholder="Имя:" name="first_name" value="" maxlength="50" class="form_orders" required="" id="id_first_name">
+                </p>
+                <p>
+                    <input type="text" placeholder="Фамилия:" name="last_name" value="" maxlength="50" class="form_orders" required="" id="id_last_name">
+                </p>
+                <p style="margin-bottom:15px;">
+                    <input type="text" placeholder="Номер телефона:" name="phoneNumber" value='+7' pattern="+7[0-9]{3}[0-9]{3}[0-9]{4}" class="form_orders" required="" id="id_phoneNumber">
+                </p>
+
+            </div>
+            <p>
+                <input type="submit" id="two_buttons_arrange_orders" class="two_buttons_in_the_basket" value="Подтвердите заказ">
+            </p>
+            <div style="font-size:smaller;max-width:90%;text-align:center;">
+                Продолжая, Вы даете <a style="text-decoration: underline;" href="{% url 'about' %}">согласие на обработку</a> персональных данных.
+            </div>
+            {% csrf_token %}
+        </div>
+    </div>
+</form>
+{% endblock %}

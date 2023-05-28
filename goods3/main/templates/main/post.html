@@ -1,0 +1,88 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block filter_header %}
+{% endblock %}
+{% block sidebar %}
+{% endblock %}
+{% block content %}
+<div class="content_product">
+    <div class="top_content_product">
+        <div class="post_title"><h3>{{post.title}}</h3></div>
+        <div style="margin-top: 7px;"><h3 style="font: normal 14px/normal Geometria,sans-serif;">{{post.price}} ₽ </h3></div><br>
+    </div>
+    <div class="img_content_block">
+        <div class="img_photo_post">{% if post.photo %}
+    <p><img id="largeImg" src="{{post.photo.url}}" width="476px"></p>
+        {% endif %}
+        </div>
+            <div class="animation_post_photo">
+                {% if post.photo %}
+        <p><img class="img_photo" src="{{post.photo.url}}" height="159px" width="100px"></p>
+            {% endif %}
+            {% if post.photo2 %}
+        <p><img class="img_photo" src="{{post.photo2.url}}" height="159px" width="100px"></p>
+            {% endif %}
+            {% if post.photo3 %}
+        <p><img class="img_photo" src="{{post.photo3.url}}" height="159px" width="100px"></p>
+        {% endif %}
+            </div>
+    </div>
+    <div class="product_description">
+        <div class="post_cat"><p>{{post.cat}}</p></div>
+        <div class="post_title post_title_and_price"><h3>{{post.title}}</h3></div><br>
+        <div class="post_title_and_price" style="font: normal 14px/normal Geometria,sans-serif;"><h3>
+            <div>{% if post.get_sale == p.price  %}
+                {{post.price|intcomma}}₽
+                {% else %}
+                <span style="color: #999;font-size: 14px;text-decoration:line-through black;">{{post.price|intcomma}}₽</span>
+                <span>{{post.get_sale|intcomma}}₽</span>
+                {% endif %}
+            </div> </h3></div><br>
+        <div class="post_available_post">{% if post.available %}
+                <form class="post_available">В наличии</form>
+            {% else %}
+                <form class="post_available">Не в наличии</form>
+            {% endif %}<br>
+        </div>
+        <div>
+        </div>
+        <div class="add_to_cart">
+            <form action="{% url 'cart:cart_add' object.id %}" method="post">
+                {{ cart_product_form }}
+                {% csrf_token %}
+                <input class="add_cart" type="submit" value="Добавить в корзину">
+            </form>
+        </div>
+        <div class="accordion">
+            <div class="post_content_active text_post"><a style="cursor: pointer;user-select: none;"><b>+ Описание<br></b></a></div>
+            <div class="post_content_on content_post" style="display:none;" >{{post.content}}<br><br>ОПЛАТА: VISA, MasterCard, American Express, Оплата при получении, MIR, PayPal</div>
+            <div class="post_structure_active text_post"><a style="cursor: pointer;user-select: none;"><b>+ Состав</b></a></div>
+            <div class="post_structure_on content_post" style="display:none;">{{post.structure}}</div>
+            <div class="post_care_active text_post"><a style="cursor: pointer;user-select: none;"><b>+ Уход</b></a></div>
+            <div class="post_care_on content_post" style="display:none;">{{post.care}}</div>
+        </div>
+    </div>
+</div>
+    <div class="similar_products">
+        <p style="margin-bottom:50px;font-size: 11px;">Похожие товары</p>
+        <div style="display:flex;justify-content: center;height: 69vh;">
+        {% for tags in similar_posts %}
+            <a style="width:29%;margin:0 1%;height:31vmax;" href="{{ tags.get_absolute_url }}">
+                <img class="img_photo" src="{{tags.photo.url}}" style="width:100%;height:100%;margin-bottom:2px;">
+                <p style="text-align:center;margin-bottom:4px;color: rgba(21,9,0,.95);">{{tags.title}}</p>
+                <div>{% if tags.get_sale == tags.price  %}
+                        <p style="font-weight: bold;text-align:center;">{{tags.price|intcomma}}₽
+                    {% else %}
+                        <div style="display:flex;justify-content: space-evenly">
+                            <span style="color:red;">{{tags.get_sale|intcomma}}₽</span>
+                            <span style="color: #AEAEAE;font-weight: bold;font-size: 14px;text-decoration:line-through;">{{tags.price|intcomma}}₽</span>
+                        </div>
+                    {% endif %}
+                </div></a>
+        {% endfor %}
+        </div>
+    </div>
+<script src="{% static 'main/js/jquery-3.6.3.js' %}"></script>
+<script src="{% static 'main/js/post.js' %}"></script>
+{% endblock %}
